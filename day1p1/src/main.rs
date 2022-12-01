@@ -13,13 +13,7 @@ struct Calories {
 
 impl Ord for Calories {
     fn cmp(&self, other: &Self) -> Ordering {
-        if self.count < other.count {
-            return Ordering::Greater;
-        } else if self.count > other.count {
-
-            return Ordering::Less;
-        }
-        return Ordering::Equal;
+        other.count.cmp(&self.count)
     }
 }
 
@@ -40,7 +34,7 @@ fn main() {
     }
     println!("Reading {target_file}...");
 
-    let contents = fs::read_to_string(&target_path).expect("Error reading");
+    let contents = fs::read_to_string(target_path).expect("Error reading");
     let mut contents = contents.split('\n');
     
     let mut t_max:  u32 = 0;
@@ -51,7 +45,7 @@ fn main() {
         match contents.next() {
             Some(t) => { 
                 
-                if t.len() == 0 {
+                if t.is_empty() {
                     priority_queue.push(Calories {count: t_max});
                     t_max = 0;
 
@@ -72,10 +66,6 @@ fn main() {
                 println!("{final_calories}");
                 break;
             },
-        }
-        
-    }
-
-
-    
+        }   
+    }    
 }
