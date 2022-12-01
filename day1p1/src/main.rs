@@ -1,14 +1,13 @@
 use std::cmp::Ordering;
+use std::collections::BinaryHeap;
 use std::env;
 use std::fs;
 use std::path::Path;
-use std::collections::BinaryHeap;
-
 
 // idk what this does yet...
 #[derive(Copy, Clone, Eq, PartialEq)]
 struct Calories {
-    count: u32
+    count: u32,
 }
 
 impl Ord for Calories {
@@ -23,7 +22,6 @@ impl PartialOrd for Calories {
     }
 }
 
-
 fn main() {
     let args: Vec<String> = env::args().collect();
     let target_file = &args[1];
@@ -36,17 +34,16 @@ fn main() {
 
     let contents = fs::read_to_string(target_path).expect("Error reading");
     let mut contents = contents.split('\n');
-    
-    let mut t_max:  u32 = 0;
+
+    let mut t_max: u32 = 0;
 
     let mut priority_queue = BinaryHeap::new();
-    
+
     loop {
         match contents.next() {
-            Some(t) => { 
-                
+            Some(t) => {
                 if t.is_empty() {
-                    priority_queue.push(Calories {count: t_max});
+                    priority_queue.push(Calories { count: t_max });
                     t_max = 0;
 
                     if priority_queue.len() > 3 {
@@ -57,7 +54,7 @@ fn main() {
                 }
                 let temp: u32 = str::parse(t).expect("Should be a number");
                 t_max += temp;
-             },
+            }
             None => {
                 let mut final_calories: u32 = 0;
                 while let Some(Calories { count }) = priority_queue.pop() {
@@ -65,7 +62,7 @@ fn main() {
                 }
                 println!("{final_calories}");
                 break;
-            },
-        }   
-    }    
+            }
+        }
+    }
 }
